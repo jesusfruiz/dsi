@@ -64,6 +64,22 @@ plt.scatter(X, BIC)
 plt.plot()
 plt.show()
 
+#3. Principio de Pareto
+value_per_client = (data.sum(axis=1)).sort_values(ascending=False)
+total_value = value_per_client.sum()    
+
+client_20percent = int(value_per_client.size*0.2)
+value_80percent = total_value*0.8
+
+value = 0
+
+for client in range(0,client_20percent):
+    value += value_per_client[client]    
+    
+print('El 20 % de los clientes generan el', value*100/total_value, '% de los gastos\n')
+
+
+
 #Los resultados del BIC indican que el número ideal de clusters es K=4
 K=4
 
@@ -101,7 +117,6 @@ n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
 
 print('Numero de clusteres obtenidos: %d' % n_clusters_)
 from sklearn import metrics
-metrics.
 print("Silhouette Coefficient: %0.3f"
       % metrics.silhouette_score(data, labels))
 
@@ -119,12 +134,10 @@ for k, col in zip(unique_labels, colors):
            
     class_member_mask = (labels == k)
     xy = data[class_member_mask & core_samples_mask]
-    plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=col,
-             markeredgecolor='k', markersize=17)
+    plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=col, markeredgecolor='k', markersize=17)
 
     xy = data[class_member_mask & ~core_samples_mask]
-    plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=col,
-             markeredgecolor='k', markersize=5)
+    plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=col, markeredgecolor='k', markersize=5)
 
 plt.show()
 
