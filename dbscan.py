@@ -75,8 +75,9 @@ value = 0
 
 for client in range(0,client_20percent):
     value += value_per_client[client]    
-
+    
 print('El 20 % de los clientes generan el', value*100/total_value, '% de los gastos\n')
+
 
 #Los resultados del BIC indican que el número ideal de clusters es K=4
 K=4
@@ -115,8 +116,8 @@ labels = db.labels_
 n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
 
 print('Numero de clusteres obtenidos: %d' % n_clusters_)
+
 from sklearn import metrics
-#metrics.
 print("Silhouette Coefficient: %0.3f"
       % metrics.silhouette_score(data, labels))
 
@@ -134,12 +135,10 @@ for k, col in zip(unique_labels, colors):
            
     class_member_mask = (labels == k)
     xy = X_pca[class_member_mask & core_samples_mask]
-    plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=col,
-             markeredgecolor='k', markersize=17)
+    plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=col, markeredgecolor='k', markersize=17)
 
     xy = X_pca[class_member_mask & ~core_samples_mask]
-    plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=col,
-             markeredgecolor='k', markersize=5)
+    plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=col, markeredgecolor='k', markersize=5)
 
 plt.show()
 
@@ -161,6 +160,26 @@ for i in groups_types:
     for j in range(atributes):
         representatives[i][groups[i].iloc[:,j].name] = statistics.mean(
                 groups[i].iloc[:,j])
+
+
+#3. Estudio estadístico
+print('El G0 ingresa', groups[0].sum(axis=1).sum(), 'euros con', groups[0].shape[0], 'personas')
+print('El G1 ingresa', groups[1].sum(axis=1).sum(), 'euros con', groups[1].shape[0], 'personas')
+print('El G2 ingresa', groups[2].sum(axis=1).sum(), 'euros con', groups[2].shape[0], 'personas')
+print('El G3 ingresa', groups[3].sum(axis=1).sum(), 'euros con', groups[3].shape[0], 'personas')
+print()
+
+# gastos/producto
+#groups[1].sum()
+
+# porcentaje gastos/producto
+#for product in groups[1].sum():
+#    print((product/groups[1].sum().sum())*100)
+
+print('El G0 consume 40% frescos, 22% ultramarinos')
+print('El G1 consume 39% ultramarinos y 25% lácteos')
+print('El G2 consume 87% frescos')
+print('El G3 consume 63% frescos')
 
 
 
