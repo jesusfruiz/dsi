@@ -64,12 +64,26 @@ plt.scatter(X, BIC)
 plt.plot()
 plt.show()
 
+#3. Principio de Pareto
+value_per_client = (data.sum(axis=1)).sort_values(ascending=False)
+total_value = value_per_client.sum()    
+
+client_20percent = int(value_per_client.size*0.2)
+value_80percent = total_value*0.8
+
+value = 0
+
+for client in range(0,client_20percent):
+    value += value_per_client[client]    
+
+print('El 20 % de los clientes generan el', value*100/total_value, '% de los gastos\n')
+
 #Los resultados del BIC indican que el número ideal de clusters es K=4
 K=4
 
+#4. Parametrización del algoritmo por medio del método de k-distancias
 estimator = PCA (n_components = 2)
 X_pca = estimator.fit_transform(data)
-#data = X_pca
 print(estimator.explained_variance_ratio_) 
 
 plt.scatter(X_pca[:,0], X_pca[:,1])
@@ -78,7 +92,7 @@ plt.show()
 dist = sklearn.neighbors.DistanceMetric.get_metric('euclidean')
 matsim = dist.pairwise(X_pca)
 
-minPts=4
+minPts=4 #Elección debido a la gran acumulación de los grupos
 A = kneighbors_graph(X_pca, minPts, include_self=False)
 Ar = A.toarray()
 
@@ -92,6 +106,7 @@ seq.sort()
 plt.plot(seq)
 plt.show()
 
+# 5. Algoritmo DBSCAN con el eps=4000 obtenido en k-distancias
 db = DBSCAN(eps=4000, min_samples=minPts).fit(data)
 core_samples_mask = numpy.zeros_like(db.labels_, dtype=bool)
 core_samples_mask[db.core_sample_indices_] = True
@@ -109,6 +124,7 @@ estimator = PCA (n_components = 2)
 X_pca = estimator.fit_transform(data)
 print(estimator.explained_variance_ratio_) 
 
+#pintamos el clustering
 unique_labels = set(labels)
 colors = plt.cm.Spectral(numpy.linspace(0, 1, len(unique_labels)))
 for k, col in zip(unique_labels, colors):
@@ -127,7 +143,7 @@ for k, col in zip(unique_labels, colors):
 
 plt.show()
 
-# Data Analysis #
+# Hitor 2: Data Analysis #
 groups_types = set(labels)
 groups = dict()
 representatives = dict()
