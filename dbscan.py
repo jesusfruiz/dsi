@@ -78,6 +78,15 @@ for client in range(0,client_20percent):
     
 print('El 20 % de los clientes generan el', value*100/total_value, '% de los gastos\n')
 
+#value2 = 0
+#clients2 = 0
+#for client_value in value_per_client:
+#    if (value2 <= value_80percent):
+#        value2 += client_value
+#        clients2 += 1
+#
+#print('El 80 % de los ingresos provienen del', clients2*100/value_per_client.shape[0], '% de los clientes\n')
+
 
 #Los resultados del BIC indican que el número ideal de clusters es K=4
 K=4
