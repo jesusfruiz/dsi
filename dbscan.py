@@ -92,15 +92,13 @@ for i in range(len(data)):
 
 sigma=statistics.stdev(SSE.values())
 mu=statistics.mean(SSE.values())
-umbral=3;
+umbral=2;
 
 outliers = []
 for i in range(len(data)):
     if abs(SSE[i]-mu)>umbral*sigma:
         outliers.append(i);
-    
 
-#4. Parametrización del algoritmo por medio del método de k-distancias
 estimator = PCA (n_components = 2)
 X_pca = estimator.fit_transform(data)
 print(estimator.explained_variance_ratio_) 
@@ -116,6 +114,19 @@ for i in range(len(X_pca)):
 plt.scatter(X_pca[:,0], X_pca[:,1])
 plt.show()
 
+print("Los outliers son:")
+for i in outliers:
+    print(i)
+    print(data.iloc[i,:])
+    print("")
+    data = data.drop(i) #Remove the outlier from data
+    
+# Calc PCA without outliers    
+estimator = PCA (n_components = 2)
+X_pca = estimator.fit_transform(data)
+print(estimator.explained_variance_ratio_)
+
+#4. Parametrización del algoritmo por medio del método de k-distancias
 dist = sklearn.neighbors.DistanceMetric.get_metric('euclidean')
 matsim = dist.pairwise(X_pca)
 
