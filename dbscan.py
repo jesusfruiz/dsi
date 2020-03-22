@@ -81,11 +81,37 @@ print('El 20 % de los clientes generan el', value*100/total_value, '% de los gas
 #Los resultados del BIC indican que el número ideal de clusters es K=4
 K=4
 
+# Jackknife #
+kmeans = KMeans(n_clusters=K, init='random', n_init=40)
+SSE = dict()
+for i in range(len(data)):
+    data_aux = data.drop(i)
+    kmeans.fit(data_aux)
+    SSE[i] = kmeans.inertia_
+
+sigma=statistics.stdev(SSE.values())
+mu=statistics.mean(SSE.values())
+umbral=3;
+
+outliers = []
+for i in range(len(data)):
+    if abs(SSE[i]-mu)>umbral*sigma:
+        outliers.append(i);
+    
+
 #4. Parametrización del algoritmo por medio del método de k-distancias
 estimator = PCA (n_components = 2)
 X_pca = estimator.fit_transform(data)
 print(estimator.explained_variance_ratio_) 
 
+for i in range(len(X_pca)):
+    if i in outliers:
+        col = 'k'
+    else:
+        col = 'w'
+        
+    plt.plot(X_pca[i, 0], X_pca[i, 1], 'o', markerfacecolor=col,
+             markeredgecolor='k', markersize=5)
 plt.scatter(X_pca[:,0], X_pca[:,1])
 plt.show()
 
@@ -131,7 +157,7 @@ for k, col in zip(unique_labels, colors):
     if k == -1:
         # Utilizamos blanco para el ruido
         col = 'w'
-           
+        
     class_member_mask = (labels == k)
     xy = X_pca[class_member_mask & core_samples_mask]
     plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=col,
@@ -143,7 +169,7 @@ for k, col in zip(unique_labels, colors):
 
 plt.show()
 
-# Hitor 2: Data Analysis #
+# Hito 2: Data Analysis #
 groups_types = set(labels)
 groups = dict()
 representatives = dict()
