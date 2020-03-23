@@ -76,16 +76,18 @@ value = 0
 for client in range(0,client_20percent):
     value += value_per_client[client]    
     
-print('El 20 % de los clientes generan el', value*100/total_value, '% de los gastos\n')
+print('El 20 % de los clientes suponen el', value*100/total_value, 
+      '% de los ingresos\n')
 
-#value2 = 0
-#clients2 = 0
-#for client_value in value_per_client:
-#    if (value2 <= value_80percent):
-#        value2 += client_value
-#        clients2 += 1
-#
-#print('El 80 % de los ingresos provienen del', clients2*100/value_per_client.shape[0], '% de los clientes\n')
+value2 = 0
+clients2 = 0
+for client_value in value_per_client:
+    if (value2 <= value_80percent):
+        value2 += client_value
+        clients2 += 1
+
+print('El 80 % de los ingresos provienen del', 
+      clients2*100/value_per_client.shape[0], '% de los clientes\n')
 
 
 #Los resultados del BIC indican que el número ideal de clusters es K=4
@@ -181,10 +183,12 @@ for k, col in zip(unique_labels, colors):
         
     class_member_mask = (labels == k)
     xy = X_pca[class_member_mask & core_samples_mask]
-    plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=col, markeredgecolor='k', markersize=17)
+    plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=col, 
+             markeredgecolor='k', markersize=17)
 
     xy = X_pca[class_member_mask & ~core_samples_mask]
-    plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=col, markeredgecolor='k', markersize=5)
+    plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=col, 
+             markeredgecolor='k', markersize=5)
 
 plt.show()
 
@@ -228,6 +232,34 @@ print('El G2 consume 87% frescos')
 print('El G3 consume 63% frescos')
 
 
+# Test paramétrico
+import scipy.stats as ss
+#media, desviacion = ss.norm.fit(data["Altura"])
+
+means = dict()
+deviations = dict()
+
+#parametric_test = dict
+
+for i in groups_types:
+    means[i] = pd.DataFrame()
+    deviations[i] = pd.DataFrame()
+        
+    means[i].append(ss.norm.fit(groups[i]['Fresh'])[0])
+#    means[i]['Fresh'], deviations[i]['Fresh'] = ss.norm.fit(groups[i]['Fresh'])
+
+#    means[i], deviations[i] = ss.norm.fit(groups[i]['Fresh'])
+#    means[i], deviations[i] = ss.norm.fit(groups[i]['Milk'])
+#    means[i], deviations[i] = ss.norm.fit(groups[i]['Grocery'])
+#    means[i], deviations[i] = ss.norm.fit(groups[i]['Frozen'])
+#    means[i], deviations[i] = ss.norm.fit(groups[i]['Detergents_Paper'])
+#    means[i], deviations[i] = ss.norm.fit(groups[i]['Delicassen'])
+    
+#    means['Milk'], deviations['Milk'] = ss.norm.fit(groups[0]['Milk'])
+#    means['Grocery'], deviations['Grocery'] = ss.norm.fit(groups[0]['Grocery'])
+#    means['Frozen'], deviations['Frozen'] = ss.norm.fit(groups[0]['Frozen'])
+#    means['Detergents_Paper'], deviations['Detergents_Paper'] = ss.norm.fit(groups[0]['Detergents_Paper'])
+#    means['Delicassen'], deviations['Delicassen'] = ss.norm.fit(groups[0]['Delicassen'])
 
         
 
