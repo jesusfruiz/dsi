@@ -155,7 +155,7 @@ seq.sort()
 plt.plot(seq)
 plt.show()
 
-# 5. Algoritmo DBSCAN con el eps=4000 obtenido en k-distancias
+# 5. Algoritmo DBSCAN con el eps=4500 obtenido en k-distancias
 db = DBSCAN(eps=4500, min_samples=minPts).fit(data)
 core_samples_mask = numpy.zeros_like(db.labels_, dtype=bool)
 core_samples_mask[db.core_sample_indices_] = True
@@ -216,7 +216,7 @@ for i in groups_types:
 print('El G0 ingresa', groups[0].sum(axis=1).sum(), 'euros con', groups[0].shape[0], 'personas')
 print('El G1 ingresa', groups[1].sum(axis=1).sum(), 'euros con', groups[1].shape[0], 'personas')
 print('El G2 ingresa', groups[2].sum(axis=1).sum(), 'euros con', groups[2].shape[0], 'personas')
-#print('El G3 ingresa', groups[3].sum(axis=1).sum(), 'euros con', groups[3].shape[0], 'personas')
+print('El grupo de outliers ingresa', groups[-1].sum(axis=1).sum(), 'euros con', groups[-1].shape[0], 'personas')
 print()
 
 # gastos/producto
@@ -227,25 +227,25 @@ print()
 #    print((product/groups[1].sum().sum())*100)
 
 print('El G0 consume 40% frescos, 22% ultramarinos')
-print('El G1 consume 39% ultramarinos y 25% lácteos')
-print('El G2 consume 87% frescos')
-print('El G3 consume 63% frescos')
+print('El G1 consume 40% ultramarinos y 25% lácteos')
+print('El G2 consume 82% frescos')
+print('El grupo de outliers consume 31% frescos, 26% ultramarinos y 19% lácteos')
 
 
 # Test paramétrico
-import scipy.stats as ss
-#media, desviacion = ss.norm.fit(data["Altura"])
-
-means = dict()
-deviations = dict()
-
-#parametric_test = dict
-
-for i in groups_types:
-    means[i] = pd.DataFrame()
-    deviations[i] = pd.DataFrame()
-        
-    means[i].append(ss.norm.fit(groups[i]['Fresh'])[0])
+#import scipy.stats as ss
+##media, desviacion = ss.norm.fit(data["Altura"])
+#
+#means = dict()
+#deviations = dict()
+#
+##parametric_test = dict
+#
+#for i in groups_types:
+#    means[i] = pd.DataFrame()
+#    deviations[i] = pd.DataFrame()
+#        
+#    means[i].append(ss.norm.fit(groups[i]['Fresh'])[0])
 #    means[i]['Fresh'], deviations[i]['Fresh'] = ss.norm.fit(groups[i]['Fresh'])
 
 #    means[i], deviations[i] = ss.norm.fit(groups[i]['Fresh'])
