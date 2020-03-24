@@ -53,7 +53,7 @@ K=2
 BIC = []
 
 while K <= 10:
-    kmeans = KMeans(n_clusters=K, init='random', n_init=10)
+    kmeans = KMeans(n_clusters=K, init='random', n_init=20)
     kmeans.fit(data)
     BIC.append(bic(K, kmeans.labels_, data))
     K += 1
@@ -141,7 +141,7 @@ print(estimator.explained_variance_ratio_)
 dist = sklearn.neighbors.DistanceMetric.get_metric('euclidean')
 matsim = dist.pairwise(X_pca)
 
-minPts=4 #Elección debido a la gran acumulación de los grupos
+minPts= 4 #Elección debido a la gran acumulación de los grupos
 A = kneighbors_graph(X_pca, minPts, include_self=False)
 Ar = A.toarray()
 
@@ -156,7 +156,7 @@ plt.plot(seq)
 plt.show()
 
 # 5. Algoritmo DBSCAN con el eps=4000 obtenido en k-distancias
-db = DBSCAN(eps=4000, min_samples=minPts).fit(data)
+db = DBSCAN(eps=4500, min_samples=minPts).fit(data)
 core_samples_mask = numpy.zeros_like(db.labels_, dtype=bool)
 core_samples_mask[db.core_sample_indices_] = True
 labels = db.labels_
@@ -216,7 +216,7 @@ for i in groups_types:
 print('El G0 ingresa', groups[0].sum(axis=1).sum(), 'euros con', groups[0].shape[0], 'personas')
 print('El G1 ingresa', groups[1].sum(axis=1).sum(), 'euros con', groups[1].shape[0], 'personas')
 print('El G2 ingresa', groups[2].sum(axis=1).sum(), 'euros con', groups[2].shape[0], 'personas')
-print('El G3 ingresa', groups[3].sum(axis=1).sum(), 'euros con', groups[3].shape[0], 'personas')
+#print('El G3 ingresa', groups[3].sum(axis=1).sum(), 'euros con', groups[3].shape[0], 'personas')
 print()
 
 # gastos/producto
