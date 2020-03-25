@@ -16,6 +16,7 @@ import sklearn.neighbors
 from sklearn.neighbors import kneighbors_graph
 import statistics
 import math
+from scipy import stats
 
 def bic(K, cidx, X):
     k = 0
@@ -230,7 +231,6 @@ print('El G1 consume 40% ultramarinos y 25% lácteos')
 print('El G2 consume 82% frescos')
 
 # Test no paramétricos #
-from scipy import stats
 pvalue = dict()
 
 s, pvalue['Fresh'] = stats.kruskal(groups[0]['Fresh'], groups[1]['Fresh'], groups[2]['Fresh'])
