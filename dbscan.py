@@ -216,7 +216,6 @@ for i in groups_types:
 print('El G0 ingresa', groups[0].sum(axis=1).sum(), 'euros con', groups[0].shape[0], 'personas')
 print('El G1 ingresa', groups[1].sum(axis=1).sum(), 'euros con', groups[1].shape[0], 'personas')
 print('El G2 ingresa', groups[2].sum(axis=1).sum(), 'euros con', groups[2].shape[0], 'personas')
-print('El grupo de outliers ingresa', groups[-1].sum(axis=1).sum(), 'euros con', groups[-1].shape[0], 'personas')
 print()
 
 # gastos/producto
@@ -229,37 +228,19 @@ print()
 print('El G0 consume 40% frescos, 22% ultramarinos')
 print('El G1 consume 40% ultramarinos y 25% lácteos')
 print('El G2 consume 82% frescos')
-print('El grupo de outliers consume 31% frescos, 26% ultramarinos y 19% lácteos')
 
+# Test no paramétricos #
+from scipy import stats
+pvalue = dict()
 
-# Test paramétrico
-#import scipy.stats as ss
-##media, desviacion = ss.norm.fit(data["Altura"])
-#
-#means = dict()
-#deviations = dict()
-#
-##parametric_test = dict
-#
-#for i in groups_types:
-#    means[i] = pd.DataFrame()
-#    deviations[i] = pd.DataFrame()
-#        
-#    means[i].append(ss.norm.fit(groups[i]['Fresh'])[0])
-#    means[i]['Fresh'], deviations[i]['Fresh'] = ss.norm.fit(groups[i]['Fresh'])
+s, pvalue['Fresh'] = stats.kruskal(groups[0]['Fresh'], groups[1]['Fresh'], groups[2]['Fresh'])
+s, pvalue['Grocery'] = stats.kruskal(groups[0]['Grocery'], groups[1]['Grocery'], groups[2]['Grocery'])
+s, pvalue['Milk'] = stats.kruskal(groups[0]['Milk'], groups[1]['Milk'], groups[2]['Milk'])
+s, pvalue['Delicassen'] = stats.kruskal(groups[0]['Delicassen'], groups[1]['Delicassen'], groups[2]['Delicassen'])
+s, pvalue['Frozen'] = stats.kruskal(groups[0]['Frozen'], groups[1]['Frozen'], groups[2]['Frozen'])
+s, pvalue['Detergents_Paper'] = stats.kruskal(groups[0]['Detergents_Paper'], groups[1]['Detergents_Paper'], groups[2]['Detergents_Paper'])
 
-#    means[i], deviations[i] = ss.norm.fit(groups[i]['Fresh'])
-#    means[i], deviations[i] = ss.norm.fit(groups[i]['Milk'])
-#    means[i], deviations[i] = ss.norm.fit(groups[i]['Grocery'])
-#    means[i], deviations[i] = ss.norm.fit(groups[i]['Frozen'])
-#    means[i], deviations[i] = ss.norm.fit(groups[i]['Detergents_Paper'])
-#    means[i], deviations[i] = ss.norm.fit(groups[i]['Delicassen'])
-    
-#    means['Milk'], deviations['Milk'] = ss.norm.fit(groups[0]['Milk'])
-#    means['Grocery'], deviations['Grocery'] = ss.norm.fit(groups[0]['Grocery'])
-#    means['Frozen'], deviations['Frozen'] = ss.norm.fit(groups[0]['Frozen'])
-#    means['Detergents_Paper'], deviations['Detergents_Paper'] = ss.norm.fit(groups[0]['Detergents_Paper'])
-#    means['Delicassen'], deviations['Delicassen'] = ss.norm.fit(groups[0]['Delicassen'])
+print(pvalue)
 
         
 
