@@ -43,13 +43,13 @@ def bic(K, cidx, X):
     return -2*sum(xi)+2*K*P*math.log(N)    
 
 
-######## MAIN ########
+# Hito 1: Determinación de Clusters #
 df = pd.read_csv("Wholesale customers data.csv")
 
 #1. Variables que deben intervenir
 data = df.iloc[:,2:]
 
-#2. Calculo número ideal de clusters
+#2.1 Calculo número ideal de clusters
 K=2
 BIC = []
 
@@ -64,6 +64,9 @@ X = list(range(2, 11))
 plt.scatter(X, BIC)
 plt.plot()
 plt.show()
+
+#Los resultados del BIC indican que el número ideal de clusters es K=4
+K=4
 
 #3. Principio de Pareto
 value_per_client = (data.sum(axis=1)).sort_values(ascending=False)
@@ -90,11 +93,7 @@ for client_value in value_per_client:
 print('El 80 % de los ingresos provienen del', 
       clients2*100/value_per_client.shape[0], '% de los clientes\n')
 
-
-#Los resultados del BIC indican que el número ideal de clusters es K=4
-K=4
-
-# Jackknife #
+#2.2 Detección y Eliminación de Outliers: Jackknife
 kmeans = KMeans(n_clusters=K, init='random', n_init=40)
 SSE = dict()
 for i in range(len(data)):
@@ -133,12 +132,12 @@ for i in outliers:
     print("")
     data = data.drop(i) #Remove the outlier from data
     
-# Calc PCA without outliers    
+# Calculo de PCA sin outliers    
 estimator = PCA (n_components = 2)
 X_pca = estimator.fit_transform(data)
 print(estimator.explained_variance_ratio_)
 
-#4. Parametrización del algoritmo por medio del método de k-distancias
+#4.1 Parametrización del algoritmo por medio del método de k-distancias
 dist = sklearn.neighbors.DistanceMetric.get_metric('euclidean')
 matsim = dist.pairwise(X_pca)
 
@@ -156,7 +155,7 @@ seq.sort()
 plt.plot(seq)
 plt.show()
 
-# 5. Algoritmo DBSCAN con el eps=4500 obtenido en k-distancias
+#4.2. Algoritmo DBSCAN con el eps=4500 obtenido en k-distancias
 db = DBSCAN(eps=4500, min_samples=minPts).fit(data)
 core_samples_mask = numpy.zeros_like(db.labels_, dtype=bool)
 core_samples_mask[db.core_sample_indices_] = True
@@ -174,7 +173,7 @@ estimator = PCA (n_components = 2)
 X_pca = estimator.fit_transform(data)
 print(estimator.explained_variance_ratio_) 
 
-#pintamos el clustering
+# Pintado del clustering
 unique_labels = set(labels)
 colors = plt.cm.Spectral(numpy.linspace(0, 1, len(unique_labels)))
 for k, col in zip(unique_labels, colors):
@@ -193,7 +192,9 @@ for k, col in zip(unique_labels, colors):
 
 plt.show()
 
-# Hito 2: Data Analysis #
+# Hito 2: Análisis de datos #
+
+#1. Cálculo de representantes
 groups_types = set(labels)
 groups = dict()
 representatives = dict()
@@ -211,26 +212,28 @@ for i in groups_types:
     for j in range(atributes):
         representatives[i][groups[i].iloc[:,j].name] = statistics.mean(
                 groups[i].iloc[:,j])
+        
+print("Los representantes de los grupos son:")
+print()
+counter = 0
+for repr in representatives.values():
+    if counter > 2:
+        break
+    print(f"El representante del grupo G{counter} es {repr}")
+    counter += 1
+print()
 
-
-#3. Estudio estadístico
+#2. Estudio estadístico
 print('El G0 ingresa', groups[0].sum(axis=1).sum(), 'euros con', groups[0].shape[0], 'personas')
 print('El G1 ingresa', groups[1].sum(axis=1).sum(), 'euros con', groups[1].shape[0], 'personas')
 print('El G2 ingresa', groups[2].sum(axis=1).sum(), 'euros con', groups[2].shape[0], 'personas')
 print()
 
-# gastos/producto
-#groups[1].sum()
-
-# porcentaje gastos/producto
-#for product in groups[1].sum():
-#    print((product/groups[1].sum().sum())*100)
-
 print('El G0 consume 40% frescos, 22% ultramarinos')
 print('El G1 consume 40% ultramarinos y 25% lácteos')
 print('El G2 consume 82% frescos')
 
-# Test no paramétricos #
+#3. Test no paramétricos
 pvalue = dict()
 
 s, pvalue['Fresh'] = stats.kruskal(groups[0]['Fresh'], groups[1]['Fresh'], groups[2]['Fresh'])
